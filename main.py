@@ -1,3 +1,54 @@
+def average_grades(grades):
+        return sum(sum(vals) for vals in grades.values()) / sum(len(vals) for vals in grades.values()) if grades else 0
+
+def compare_students(student_one, student_two):
+    if not isinstance(student_one, Student) or not isinstance(student_two, Student):
+        return "Ошибка: Оба объекта должны быть экземплярами класса Student."
+    avg_grade_one = average_grades(student_one.grades)
+    avg_grade_two = average_grades(student_two.grades)
+    if avg_grade_one < avg_grade_two:
+        return f"{student_one.name} {student_one.surname} имеет более низкую среднюю оценку чем {student_two.name} {student_two.surname}."
+    elif avg_grade_one > avg_grade_two:
+        return f"{student_one.name} {student_one.surname} имеет более высокую среднюю оценку чем {student_two.name} {student_two.surname}."
+    else:
+        return f"Средняя оценка {student_one.name} {student_one.surname} и {student_two.name} {student_two.surname} одинакова."
+
+def compare_lecturers(lecturer_one, lecturer_two):
+    if not isinstance(lecturer_one, Lecturer) or not isinstance(lecturer_two, Lecturer):
+        return "Ошибка: Оба объекта должны быть экземплярами класса Lecturer."
+    avg_grade_one = average_grades(lecturer_one.lecturer_grades)
+    avg_grade_two = average_grades(lecturer_two.lecturer_grades)
+    if avg_grade_one < avg_grade_two:
+        return f"{lecturer_one.name} {lecturer_one.surname} имеет более низкую среднюю оценку за лекции чем {lecturer_two.name} {lecturer_two.surname}."
+    elif avg_grade_one > avg_grade_two:
+        return f"{lecturer_one.name} {lecturer_one.surname} имеет более высокую среднюю оценку за лекции чем {lecturer_two.name} {lecturer_two.surname}."
+    else:
+        return f"Средняя оценка за лекции {lecturer_one.name} {lecturer_one.surname} и {lecturer_two.name} {lecturer_two.surname} одинакова."
+    
+def average_students_grades(students, course_name):
+    total_sum = 0
+    total_count = 0
+    for student in students:
+        if isinstance(student, Student) and course_name in student.grades:
+            total_sum += sum(student.grades[course_name])
+            total_count += len(student.grades[course_name])
+    if total_count > 0:
+        return total_sum / total_count
+    else:
+        return 0
+    
+def average_lecture_grades(lecturers, course_name):
+    total_sum = 0
+    total_count = 0
+    for lecturer in lecturers:
+        if isinstance(lecturer, Lecturer) and course_name in lecturer.lecturer_grades:
+            total_sum += sum(lecturer.lecturer_grades[course_name])
+            total_count += len(lecturer.lecturer_grades[course_name])
+    if total_count > 0:
+        return total_sum / total_count
+    else:
+        return 0
+    
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -8,7 +59,7 @@ class Student:
         self.grades = {}
 
     def __str__(self):
-        average_grade = sum(sum(vals) for vals in self.grades.values()) / sum(len(vals) for vals in self.grades.values()) if self.grades else 0
+        average_grade = average_grades(self.grades)
         in_progress_courses = ', '.join(self.courses_in_progress)
         finished_courses = ', '.join(self.finished_courses)
         return f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {average_grade:.1f}\nКурсы в процессе изучения: {in_progress_courses}\nЗавершенные курсы: {finished_courses}\n"
@@ -31,7 +82,7 @@ class Lecturer(Mentor):
         self.lecturer_grades = {}
 
     def __str__(self):
-        average_grade = self.average_grade(grades = self.lecturer_grades)
+        average_grade = average_grades(grades = self.lecturer_grades)
         return f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {average_grade:.1f}\n"
     
     def rate(self, course, mark):
@@ -39,9 +90,6 @@ class Lecturer(Mentor):
             self.lecturer_grades[course] += [mark]
         else:
             self.lecturer_grades[course] = [mark]
-
-    def average_grade(self, grades):
-        return sum(sum(vals) for vals in grades.values()) / sum(len(vals) for vals in grades.values()) if grades else 0
 
 class Reviewer(Mentor):
     def __str__(self):
@@ -55,6 +103,8 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
+
+
  
 best_student = Student('Michael', 'Schumacher', 'male')
 best_student.courses_in_progress += ['Python']
@@ -88,3 +138,7 @@ print(bad_student)
 print(lecturer)
 print(cool_lecturer)
 print(cool_mentor)
+print(compare_students(best_student, bad_student))
+print(compare_lecturers(lecturer, cool_lecturer))
+print(average_students_grades([best_student, bad_student], 'Python'))
+print(average_lecture_grades([lecturer, cool_lecturer], 'Python'))
