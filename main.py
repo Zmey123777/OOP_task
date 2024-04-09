@@ -68,7 +68,7 @@ class Student:
         if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
             lecturer.rate(course, mark)
         else:
-            print("Error: У данного лектора нет курсов.")
+            print("Ошибка: У данного лектора нет курсов.")
         
 class Mentor:
     def __init__(self, name, surname):
@@ -87,7 +87,10 @@ class Lecturer(Mentor):
     
     def rate(self, course, mark):
         if course in self.lecturer_grades:
-            self.lecturer_grades[course] += [mark]
+            if 1 <= mark <= 10:
+                self.lecturer_grades[course] += [mark]
+            else:
+                print(f"Ошибка: Оценка ({mark}) должна быть от 1 до 10.")
         else:
             self.lecturer_grades[course] = [mark]
 
@@ -104,8 +107,6 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
-
- 
 best_student = Student('Michael', 'Schumacher', 'male')
 best_student.courses_in_progress += ['Python']
 best_student.finished_courses += ['PHP']
