@@ -26,7 +26,9 @@ class Mentor:
         self.courses_attached = []
         
 class Lecturer(Mentor):
-    lecturer_grades = {}
+    def __init__(self, name, surname):
+        super().__init__(name, surname)
+        self.lecturer_grades = {}
 
     def __str__(self):
         average_grade = self.average_grade(grades = self.lecturer_grades)
@@ -57,22 +59,32 @@ class Reviewer(Mentor):
 best_student = Student('Michael', 'Schumacher', 'male')
 best_student.courses_in_progress += ['Python']
 best_student.finished_courses += ['PHP']
+bad_student = Student('Ilya', 'Oblomov', 'male')
+bad_student.courses_in_progress += ['Python']
+bad_student.courses_in_progress += ['PHP']
+bad_student.finished_courses += ['PHP']
  
 cool_mentor = Reviewer('Boris', 'Elcin')
 cool_mentor.courses_attached += ['Python']
+bad_mentor = Reviewer('Iosif', 'Stalin')
+bad_mentor.courses_attached += ['PHP']
  
 cool_mentor.rate_hw(best_student, 'Python', 10)
 cool_mentor.rate_hw(best_student, 'Python', 10)
 cool_mentor.rate_hw(best_student, 'Python', 10)
+bad_mentor.rate_hw(bad_student, 'PHP', 2)
 
 lecturer = Lecturer('Vasiliy', 'Chapaev')
-lecturer.courses_attached = 'Python'
+lecturer.courses_attached += ['Python']
 best_student.rate_lecture(lecturer, 'Python', 5)
 best_student.rate_lecture(lecturer, 'Python', 7)
 best_student.rate_lecture(lecturer, 'Python', 9)
+cool_lecturer = Lecturer('Stenka', 'Razin')
+cool_lecturer.courses_attached += ['PHP']
+bad_student.rate_lecture(cool_lecturer, 'PHP', 10)
 
- 
-print(best_student.grades)
 print(best_student)
+print(bad_student)
 print(lecturer)
+print(cool_lecturer)
 print(cool_mentor)
