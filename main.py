@@ -64,6 +64,24 @@ class Student:
         finished_courses = ', '.join(self.finished_courses)
         return f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {average_grade:.1f}\nКурсы в процессе изучения: {in_progress_courses}\nЗавершенные курсы: {finished_courses}\n"
 
+    def __lt__(self, other):
+        return average_grades(self.grades) < average_grades(other.grades)
+
+    def __le__(self, other):
+        return average_grades(self.grades) <= average_grades(other.grades)
+
+    def __gt__(self, other):
+        return average_grades(self.grades) > average_grades(other.grades)
+
+    def __ge__(self, other):
+        return average_grades(self.grades) >= average_grades(other.grades)
+
+    def __eq__(self, other):
+        return average_grades(self.grades) == average_grades(other.grades)
+
+    def __ne__(self, other):
+        return average_grades(self.grades) != average_grades(other.grades)
+
     def rate_lecture(self, lecturer, course, mark):
         if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
             lecturer.rate(course, mark)
@@ -85,6 +103,24 @@ class Lecturer(Mentor):
         average_grade = average_grades(grades = self.lecturer_grades)
         return f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {average_grade:.1f}\n"
     
+    def __lt__(self, other):
+        return average_grades(self.lecturer_grades) < average_grades(other.lecturer_grades)
+
+    def __le__(self, other):
+        return average_grades(self.lecturer_grades) <= average_grades(other.lecturer_grades)
+
+    def __gt__(self, other):
+        return average_grades(self.lecturer_grades) > average_grades(other.lecturer_grades)
+
+    def __ge__(self, other):
+        return average_grades(self.lecturer_grades) >= average_grades(other.lecturer_grades)
+
+    def __eq__(self, other):
+        return average_grades(self.lecturer_grades) == average_grades(other.lecturer_grades)
+
+    def __ne__(self, other):
+        return average_grades(self.lecturer_grades) != average_grades(other.lecturer_grades)
+
     def rate(self, course, mark):
         if course in self.lecturer_grades:
             if 1 <= mark <= 10:
@@ -139,7 +175,20 @@ print(bad_student)
 print(lecturer)
 print(cool_lecturer)
 print(cool_mentor)
-print(compare_students(best_student, bad_student))
-print(compare_lecturers(lecturer, cool_lecturer))
 print(average_students_grades([best_student, bad_student], 'Python'))
 print(average_lecture_grades([lecturer, cool_lecturer], 'Python'))
+
+#Сравнение при помощи магических методов
+if best_student > bad_student:
+    print(f"{best_student.name} {best_student.surname} имеет более высокую оценку чем: {bad_student.name} {bad_student.surname}.")
+elif best_student < bad_student:
+    print(f"{best_student.name} {best_student.surname} имеет более низкую оценку чем {bad_student.name} {bad_student.surname}.")
+else:
+    print(f"{best_student.name} {best_student.surname} and {bad_student.name} {bad_student.surname} имеют одинаковый уровень оценок.")
+
+if lecturer > cool_lecturer:
+    print(f"{lecturer.name} {lecturer.surname} имеет более высокую оценку чем: {cool_lecturer.name} {cool_lecturer.surname}.")
+elif lecturer < cool_lecturer:
+    print(f"{lecturer.name} {lecturer.surname} имеет более низкую оценку чем {cool_lecturer.name} {cool_lecturer.surname}.")
+else:
+    print(f"{lecturer.name} {lecturer.surname} и {cool_lecturer.name} {cool_lecturer.surname} имеют одинаковый уровень оценок.")
